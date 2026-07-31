@@ -1,0 +1,79 @@
+{
+  "schemaVersion": 1,
+  "id": "cow-cat",
+  "name": "Cow Cat",
+  "author": "Desktop DJ",
+  "renderMode": "flattened",
+  "animations": [
+    {
+      "id": "playing-main",
+      "state": "playing",
+      "file": "animations/playing-main.gif",
+      "fps": 12,
+      "duration": 5.04,
+      "weight": 0.62,
+      "cooldownSeconds": 0,
+      "isPrimary": true
+    },
+    {
+      "id": "playing-alt",
+      "state": "playing",
+      "file": "animations/playing-alt.gif",
+      "fps": 12,
+      "duration": 6.08,
+      "weight": 0.33,
+      "cooldownSeconds": 0,
+      "isPrimary": false
+    },
+    {
+      "id": "drink-beer",
+      "state": "playing",
+      "file": "animations/drink-beer.gif",
+      "fps": 12,
+      "duration": 9.06,
+      "weight": 0.05,
+      "cooldownSeconds": 120,
+      "isPrimary": false
+    },
+    {
+      "id": "sleeping-main",
+      "state": "sleeping",
+      "file": "animations/sleeping-main.gif",
+      "fps": 12,
+      "duration": 4.04,
+      "weight": 1.0,
+      "cooldownSeconds": 0,
+      "isPrimary": true
+    },
+    {
+      "id": "switching-main",
+      "state": "switching",
+      "file": "animations/switching-main.gif",
+      "fps": 12,
+      "duration": 4.04,
+      "weight": 1.0,
+      "cooldownSeconds": 0,
+      "isPrimary": true
+    }
+  ],
+  "compact": {
+    "playing": "compact/headphones-upright.png",
+    "paused": "compact/headphones-flat.png"
+  },
+  "interaction": {
+    "expandedPet": {
+      "x": 0,
+      "y": 54,
+      "width": 230,
+      "height": 159,
+      "tolerance": 6
+    },
+    "compactPet": {
+      "x": 0,
+      "y": 23,
+      "width": 80,
+      "height": 65,
+      "tolerance": 4
+    }
+  }
+}
