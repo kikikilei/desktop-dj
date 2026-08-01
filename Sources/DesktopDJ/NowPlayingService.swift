@@ -80,12 +80,17 @@ final class NowPlayingService: @unchecked Sendable {
         process.executableURL = executableURL
         process.arguments = arguments
         process.standardOutput = pipe
-        process.standardError = Pipe()
+        // Must not be an undrained Pipe: anything the bridge writes to stderr
+        // would fill the buffer and block it forever.
+        process.standardError = FileHandle.nullDevice
 
         do {
             try process.run()
-            process.waitUntilExit()
+            // Drain stdout *before* waiting. `get-raw` returns base64 artwork
+            // and easily exceeds the 64 KB pipe buffer, so a child blocked on
+            // write() plus a parent blocked in waitUntilExit() deadlocks.
             let data = pipe.fileHandleForReading.readDataToEndOfFile()
+            process.waitUntilExit()
             return String(data: data, encoding: .utf8)
         } catch {
             return nil

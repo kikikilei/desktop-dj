@@ -14,7 +14,7 @@ BINARY_DIR="$STAGE_DIR/Binaries"
 BRIDGE_SOURCE_ARCHIVE="$ROOT_DIR/Vendor/nowplaying-cli/source/nowplaying-cli-v2.1.0.tar.gz"
 trap 'rm -rf "$STAGE_DIR"' EXIT
 
-python "$ROOT_DIR/Scripts/prepare_assets.py"
+python3 "$ROOT_DIR/Scripts/prepare_assets.py"
 
 rm -rf "$APP_DIR"
 mkdir -p "$APP_DIR/Contents/MacOS" "$APP_DIR/Contents/Resources"
