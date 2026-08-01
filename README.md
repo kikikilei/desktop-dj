@@ -4,6 +4,26 @@ Desktop DJ is a tiny pixel-art music companion for macOS. It reads the
 system-wide Now Playing state, so it works with Spotify, NetEase Music,
 Apple Music, and other players that publish playback metadata to macOS.
 
+<p align="center">
+  <img
+    src="Assets/cat-playing-deck-v2-prepared.png"
+    width="420"
+    alt="A pixel-art cow cat DJ wearing headphones and sunglasses"
+  >
+  <br>
+  <strong>Full DJ mode</strong>
+</p>
+
+<p align="center">
+  <img
+    src="Assets/compact/headphones-upright-compact.png"
+    width="112"
+    alt="Desktop DJ compact headphones mode"
+  >
+  <br>
+  <strong>Compact headphones mode</strong> · Double-click to collapse or expand
+</p>
+
 > Personal toy, shared for noncommercial learning and collaboration. Commercial
 > use is not permitted. See [LICENSE.md](LICENSE.md).
 
