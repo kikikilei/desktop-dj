@@ -22,7 +22,10 @@ final class AppDelegate: NSObject,
     private var positionSaveWorkItem: DispatchWorkItem?
     private var statusItem: NSStatusItem?
     private var statusMenu: NSMenu?
+    private var isPreparingDiagnosticReport = false
+    private var diagnosticReportCopiedAt: Date?
     private let player = PlayerViewModel()
+    private let diagnosticService = NowPlayingService()
     private let expandedSize = NSSize(width: 230, height: 213)
     private let compactSize = NSSize(width: 80, height: 88)
 
@@ -269,6 +272,22 @@ final class AppDelegate: NSObject,
         }
 
         menu.addItem(.separator())
+        let diagnosticTitle: String
+        if isPreparingDiagnosticReport {
+            diagnosticTitle = "Preparing Diagnostic Report…"
+        } else if let copiedAt = diagnosticReportCopiedAt,
+                  Date().timeIntervalSince(copiedAt) < 4 {
+            diagnosticTitle = "Copy Diagnostic Report ✓"
+        } else {
+            diagnosticTitle = "Copy Diagnostic Report"
+        }
+        let diagnosticItem = item(
+            diagnosticTitle,
+            action: #selector(copyDiagnosticReport)
+        )
+        diagnosticItem.isEnabled = !isPreparingDiagnosticReport
+        menu.addItem(diagnosticItem)
+        menu.addItem(.separator())
         menu.addItem(item("Quit Desktop DJ", action: #selector(quitDesktopDJ)))
     }
 
@@ -307,6 +326,60 @@ final class AppDelegate: NSObject,
     }
     @objc private func openSkinsFolder() {
         NSWorkspace.shared.open(player.skinsFolderURL)
+    }
+    @objc private func copyDiagnosticReport() {
+        guard !isPreparingDiagnosticReport else { return }
+        isPreparingDiagnosticReport = true
+
+        let bundle = Bundle.main
+        let bundleIdentifier = bundle.bundleIdentifier
+        let runningInstances = bundleIdentifier.map {
+            NSRunningApplication.runningApplications(
+                withBundleIdentifier: $0
+            ).count
+        } ?? 1
+        let appContext = DiagnosticAppContext(
+            version: bundle.object(
+                forInfoDictionaryKey: "CFBundleShortVersionString"
+            ) as? String ?? "Unknown",
+            build: bundle.object(
+                forInfoDictionaryKey: "CFBundleVersion"
+            ) as? String ?? "Unknown",
+            mode: player.isPreviewMode ? "Preview" : "Live Now Playing",
+            skin: player.activeSkin.definition.name,
+            displayMode: player.isCompact ? "Compact" : "Expanded",
+            appLocation: DiagnosticReportFormatter.safeAppLocation(
+                bundle.bundleURL
+            ),
+            duplicateProcessCount: max(1, runningInstances),
+            lastSuccessfulUpdateAge: player.lastSuccessfulUpdateAge
+        )
+        let service = diagnosticService
+
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            let bridge = service.diagnose()
+            let report = DiagnosticReportFormatter.make(
+                app: appContext,
+                bridge: bridge
+            )
+            DispatchQueue.main.async {
+                guard let self else { return }
+                let pasteboard = NSPasteboard.general
+                pasteboard.clearContents()
+                pasteboard.setString(report, forType: .string)
+                self.isPreparingDiagnosticReport = false
+                self.diagnosticReportCopiedAt = Date()
+                self.statusItem?.button?.toolTip =
+                    "Desktop DJ — diagnostic report copied"
+
+                DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
+                    [weak self] in
+                    guard let self else { return }
+                    self.diagnosticReportCopiedAt = nil
+                    self.statusItem?.button?.toolTip = "Desktop DJ"
+                }
+            }
+        }
     }
     @objc private func quitDesktopDJ() { NSApplication.shared.terminate(nil) }
 }

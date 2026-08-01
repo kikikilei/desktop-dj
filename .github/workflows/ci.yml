@@ -1,0 +1,17 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  test-and-build:
+    runs-on: macos-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run regression tests
+        run: ./Scripts/run_tests.sh
+      - name: Build and verify distributable
+        run: ./build.sh
