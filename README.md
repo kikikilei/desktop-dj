@@ -32,6 +32,9 @@ unidentified-developer warning.
 - Hover over the compact headphones for quick playback controls.
 - Use the menu-bar cat icon for Show/Hide, playback controls, reset position,
   and skin management.
+- Choose **Copy Diagnostic Report** from either menu when playback detection
+  fails. The report is copied locally, omits song and account details, and is
+  never uploaded automatically.
 
 Desktop DJ opens expanded on every launch. The expanded player is 230 × 213
 points; the compact headphones remain 80 × 88 points.
@@ -55,6 +58,10 @@ The app builds and embeds a universal `nowplaying-cli` 2.1.0 bridge from its
 vendored source archive. Its matching license, README, and source archive are
 included under `Contents/Resources/ThirdParty`. A separate Homebrew
 installation is not required.
+
+Now Playing metadata is polled without artwork; album artwork is fetched and
+pixelated only when the visible track changes. Bridge calls have a timeout so
+an unresponsive music provider cannot freeze future updates.
 
 ## Contributing and design
 

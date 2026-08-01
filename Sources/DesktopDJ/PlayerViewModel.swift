@@ -57,6 +57,10 @@ final class PlayerViewModel: ObservableObject {
         return min(1, displayedElapsed / duration)
     }
 
+    var lastSuccessfulUpdateAge: TimeInterval? {
+        lastValidSnapshotDate.map { Date().timeIntervalSince($0) }
+    }
+
     init() {
         let catalog = SkinCatalog()
         skinCatalog = catalog
@@ -75,7 +79,7 @@ final class PlayerViewModel: ObservableObject {
         animationScheduler.enter(state: .sleeping)
         refreshLiveSnapshot()
 
-        pollTimer = Timer.scheduledTimer(withTimeInterval: 0.35, repeats: true) {
+        pollTimer = Timer.scheduledTimer(withTimeInterval: 0.75, repeats: true) {
             [weak self] _ in
             Task { @MainActor in
                 self?.refreshLiveSnapshot()
