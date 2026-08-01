@@ -7,6 +7,21 @@ Apple Music, and other players that publish playback metadata to macOS.
 > Personal toy, shared for noncommercial learning and collaboration. Commercial
 > use is not permitted. See [LICENSE.md](LICENSE.md).
 
+## Download
+
+[Download Desktop DJ for macOS](https://github.com/kikikilei/desktop-dj/releases/latest)
+
+Installation:
+
+1. Download `Desktop-DJ-macOS.zip` from the latest release.
+2. Unzip it and drag `Desktop DJ.app` into Applications.
+3. On first launch, Control-click or right-click the app, choose **Open**, and
+   confirm **Open** once more.
+
+Desktop DJ currently uses an ad-hoc signature and is not notarized through the
+Apple Developer Program, so opening it by double-click alone may show an
+unidentified-developer warning.
+
 ## Interaction
 
 - Drag the cat or headphones to move Desktop DJ.
